@@ -8,22 +8,25 @@ import sys
 #class for RSS feeds
 class Feed:
     def __init__(self, url):
-        self.url = url
+        self.feedUrl = url
 
+#get top entry of feed at feedUrl
     def setTopEntry(self):
-        entryList = feedparser.parse(self.url)
+        entryList = feedparser.parse(self.feedUrl)
         self.curTop = entryList.entries[0]
 
+#parse size information from entry's description
     def setSize(self):
-        string = self.curTop.description
-        sizeIndex = string.find('Size:')
-        sizeSub = string[sizeIndex:sizeIndex+15]
+        description = self.curTop.description
+        sizeIndex = description.find('Size:')
+        sizeSub = description[sizeIndex:sizeIndex+15]
         endIndex = sizeSub.find('B')
         self.size = sizeSub[0:endIndex+1]
 
     def getTop(self):
         return self.curTop
 
+#get download/view link from top entry
     def getLink(self):
         return self.curTop.link
 
@@ -62,9 +65,6 @@ initFeed = Feed(sys.argv[1])
 initFeed.setTopEntry()
 initFeed.setSize()
 
-print initFeed.getTitle()
-print initFeed.getLink()
-print initFeed.getSize()
 
 #construct new feed object every 30 seconds and compare to initial
 
